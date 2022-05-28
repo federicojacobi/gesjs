@@ -6,6 +6,6 @@ export default class Entity {
 
 	addComponent( component ) {
 		this.components[ component.type ] = component;
-		return component;
+		return this;
 	}
 }

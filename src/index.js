@@ -6,18 +6,23 @@ import VelocityComponent from './components/VelocityComponent';
 import PhysicsSystem from './systems/PhysicsSystem';
 import Scene from './includes/Scene';
 import Game from './includes/Game';
+
+import TestImage from './assets/consumables.png';
+import SpriteComponent from './components/SpriteComponent';
+
 class Scene1 extends Scene {
 	create() {
 		this.systems.push( new PhysicsSystem( this ) );
 		this.systems.push( new DrawSystem( this ) );
 
-		for ( let i = 0; i < 1000; i++ ) {
+		for ( let i = 0; i < 2; i++ ) {
 			let entity = new Entity( i );
-			let component = entity.addComponent( new PositionComponent() );
-			component.x = Math.random() * this.game.config.width;
-			component.y = Math.random() * this.game.config.height;
+			let positionComponent = new PositionComponent( Math.random() * this.game.config.width, Math.random() * this.game.config.height );
+			
 
-			entity.addComponent( new VelocityComponent( Math.random() * 15, Math.random() * 10 ) );
+			entity.addComponent( positionComponent ).
+				addComponent( new VelocityComponent( Math.random() * 150, Math.random() * 100 ) ).
+				addComponent( new SpriteComponent( TestImage ) );
 
 			this.entities.push( entity );
 		}
@@ -29,7 +34,7 @@ class Scene1 extends Scene {
 }
 
 window.game = new Game( {
-	width: 800,
-	height: 800,
+	width: 640,
+	height: 480,
 	scenes: [ new Scene1() ],
 } );

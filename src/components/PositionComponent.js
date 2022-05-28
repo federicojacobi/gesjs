@@ -7,5 +7,6 @@ export default class PositionComponent extends Component {
 		this.type = 'position';
 		this.x = x || 100;
 		this.y = y || 200;
+		this.angle = 0;
 	}
 }

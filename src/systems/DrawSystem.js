@@ -11,6 +11,7 @@ export default class DrawSystem extends System {
 		};
 
 		this.canvas = document.createElement( 'canvas' );
+		this.canvas.style.backgroundColor = 'black';
 		this.ctx = this.canvas.getContext( '2d' );
 		this.canvas.width = this.config.width;
 		this.canvas.height = this.config.height;
@@ -18,27 +19,38 @@ export default class DrawSystem extends System {
 	}
 
 	query() {
-		this.entities = this.scene.entities.filter( entity => entity.components.hasOwnProperty( 'position' ) );
+		this.entities = this.scene.entities.filter( 
+			entity => entity.components.hasOwnProperty( 'position' ) && entity.components.hasOwnProperty( 'sprite' )
+		);
 	}
 
 	update() {
 		this.query();
 		let ctx = this.ctx;
-		ctx.fillStyle = '#000000';
-		ctx.fillRect( 0, 0, this.config.width, this.config.height );
+		ctx.clearRect( 0, 0, this.config.width, this.config.height );
 
-		ctx.lineWidth = 2;
+		ctx.lineWidth = 1;
 		ctx.fillStyle = '#ff0000';
-		ctx.strokeStyle = '#FFFFFF';
-
+		
+		// ctx.strokeStyle = '#FFFFFF';
 		this.entities.forEach( entity => {
 			let position = entity.components.position;
-			ctx.beginPath();
-			ctx.arc( position.x, position.y, 10, 0, 2 * Math.PI, false );
-			ctx.stroke();
+			let sprite = entity.components.sprite;
+
+			// ctx.strokeRect( position.x, position.y, 10, 10 );
+			if ( sprite.ready ) {
+				let scale = 1;
+				ctx.setTransform( scale, 0, 0, scale, position.x, position.y ); // sets scale and origin
+
+  				ctx.rotate( position.angle );
+
+				ctx.drawImage( sprite.image, 0, 0, 16, 16, position.x, position.y, 16, 16 );
+				ctx.setTransform(1,0,0,1,0,0);
+			}
+			
 		} );
 
-		ctx.font = '10px sans-serif';
+		ctx.font = '14px sans-serif';
 		ctx.fillText( 'FPS: ' + this.scene.game.fps, 10, 10 );
 	}
 }
