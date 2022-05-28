@@ -1,4 +1,5 @@
 export default class Component {
-	constructor() {
+	constructor( type ) {
+		this.type = type;
 	}
 }

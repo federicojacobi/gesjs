@@ -15,14 +15,19 @@ class Scene1 extends Scene {
 		this.systems.push( new PhysicsSystem( this ) );
 		this.systems.push( new DrawSystem( this ) );
 
-		for ( let i = 0; i < 2; i++ ) {
+		for ( let i = 0; i < 1000; i++ ) {
 			let entity = new Entity( i );
-			let positionComponent = new PositionComponent( Math.random() * this.game.config.width, Math.random() * this.game.config.height );
-			
+			let position = new PositionComponent( Math.random() * this.game.config.width, Math.random() * this.game.config.height );
+			position.angularSpeed = Math.random() * Math.PI;
 
-			entity.addComponent( positionComponent ).
+			entity.
+				addComponent( position ).
+				// addComponent( new PositionComponent( this.game.config.width / 2, this.game.config.height / 2 ) ).
+				// addComponent( new VelocityComponent() ).
 				addComponent( new VelocityComponent( Math.random() * 150, Math.random() * 100 ) ).
-				addComponent( new SpriteComponent( TestImage ) );
+				addComponent( new SpriteComponent( {
+					file: TestImage
+				} ) );
 
 			this.entities.push( entity );
 		}

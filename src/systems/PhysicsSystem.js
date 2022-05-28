@@ -11,7 +11,8 @@ export default class PhysicsSystem extends System {
 			let velocity = entity.components.velocity;
 
 			position.x += ( velocity.x * delta );
-			position.y = position.y + ( velocity.y * delta );
+			position.y += ( velocity.y * delta );
+			position.angle += position.angularSpeed * delta;
 
 			if ( position.x > this.scene.game.config.width || position.x <= 0 ) {
 				velocity.x *= -1;

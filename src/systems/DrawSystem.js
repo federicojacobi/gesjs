@@ -31,23 +31,21 @@ export default class DrawSystem extends System {
 
 		ctx.lineWidth = 1;
 		ctx.fillStyle = '#ff0000';
-		
-		// ctx.strokeStyle = '#FFFFFF';
+
+		ctx.strokeStyle = '#FFFFFF';
 		this.entities.forEach( entity => {
 			let position = entity.components.position;
 			let sprite = entity.components.sprite;
 
-			// ctx.strokeRect( position.x, position.y, 10, 10 );
-			if ( sprite.ready ) {
-				let scale = 1;
-				ctx.setTransform( scale, 0, 0, scale, position.x, position.y ); // sets scale and origin
-
+			// ctx.strokeRect( position.x, position.y, 16, 16 );
+			if ( sprite.image.complete ) {
+				ctx.setTransform( sprite.scale, 0, 0, sprite.scale, position.x, position.y ); // sets scale and origin
   				ctx.rotate( position.angle );
+				
+				ctx.drawImage( sprite.image, 0, 0, 16, 16, -8, -8, 16, 16 );
 
-				ctx.drawImage( sprite.image, 0, 0, 16, 16, position.x, position.y, 16, 16 );
-				ctx.setTransform(1,0,0,1,0,0);
+				ctx.setTransform( 1, 0, 0, 1, 0, 0 );
 			}
-			
 		} );
 
 		ctx.font = '14px sans-serif';

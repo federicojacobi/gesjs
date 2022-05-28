@@ -1,15 +1,17 @@
 import Component from "../includes/Component";
 
 export default class SpriteComponent extends Component {
-	constructor( image ) {
-		super();
+	constructor( imageConfig ) {
+		super( 'sprite' );
 
-		this.type = 'sprite';
+        let config = {
+            file: '',
+            scale: 1,
+            ... imageConfig
+        };
+
         this.image = new Image();
-        this.image.src = image;
-        this.image.addEventListener( 'load', () => {
-            this.ready = true;
-        } );
-        this.ready = false;
+        this.image.src = config.image;
+        this.scale = config.scale;
 	}
 }
