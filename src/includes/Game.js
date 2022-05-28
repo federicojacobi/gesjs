@@ -1,4 +1,5 @@
 import EventEmitter from "./EventEmitter";
+import ResourceManager from "./ResourceManager";
 
 let lastFrameTimestamp = 0;
 
@@ -20,16 +21,23 @@ export default class Game extends EventEmitter {
 		this.perSecond = 0;
 		this.fps = 0;
 
+		this.resourceManager = new ResourceManager();
+
 		this.init();
 	}
 
 	init() {
 		this.activeScene = this.config.scenes[0];
 		this.config.scenes.forEach( scene => scene.game = this );
-		this.activeScene.create();
+		
+		this.activeScene.preload();
 
-		lastFrameTimestamp = performance.now();
-		this.animationFrame = requestAnimationFrame( this.update.bind( this ) );
+		Promise.all( this.resourceManager.promises ).then( () => {
+			this.activeScene.create();
+
+			lastFrameTimestamp = performance.now();
+			this.animationFrame = requestAnimationFrame( this.update.bind( this ) );
+		} );
 	}
 
 	update( timestamp ) {

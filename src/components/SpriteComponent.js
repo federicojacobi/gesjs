@@ -4,14 +4,16 @@ export default class SpriteComponent extends Component {
 	constructor( imageConfig ) {
 		super( 'sprite' );
 
-        let config = {
-            file: '',
-            scale: 1,
-            ... imageConfig
-        };
+		let config = {
+			key: '',
+			width: null,
+			height: null,
+			scale: 1,
+			... imageConfig
+		};
 
-        this.image = new Image();
-        this.image.src = config.image;
-        this.scale = config.scale;
+		for ( const key in config ) {
+			this[key] = config[key];
+		}
 	}
 }

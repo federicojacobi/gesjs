@@ -11,14 +11,20 @@ import TestImage from './assets/consumables.png';
 import SpriteComponent from './components/SpriteComponent';
 
 class Scene1 extends Scene {
+	preload() {
+		this.load( 'testImage', 'image', TestImage );
+	}
+
 	create() {
 		this.systems.push( new PhysicsSystem( this ) );
 		this.systems.push( new DrawSystem( this ) );
 
 		for ( let i = 0; i < 1000; i++ ) {
-			let entity = new Entity( i );
+			let entity = new Entity( this, i );
 			let position = new PositionComponent( Math.random() * this.game.config.width, Math.random() * this.game.config.height );
 			position.angularSpeed = Math.random() * Math.PI;
+
+			let image = this.game.resourceManager.get( 'testImage' );
 
 			entity.
 				addComponent( position ).
@@ -26,7 +32,14 @@ class Scene1 extends Scene {
 				// addComponent( new VelocityComponent() ).
 				addComponent( new VelocityComponent( Math.random() * 150, Math.random() * 100 ) ).
 				addComponent( new SpriteComponent( {
-					file: TestImage
+					image: image,
+					width: 16,
+					height: 16,
+					displayWidth: 16,
+					displayHeight: 16,
+					originX: 16 * Math.floor( Math.random() * 20 ),
+					originY: 16 * Math.floor( Math.random() * 20 ),
+					scale: 1
 				} ) );
 
 			this.entities.push( entity );

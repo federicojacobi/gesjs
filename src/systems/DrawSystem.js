@@ -12,6 +12,7 @@ export default class DrawSystem extends System {
 
 		this.canvas = document.createElement( 'canvas' );
 		this.canvas.style.backgroundColor = 'black';
+		this.canvas.style.imageRendering = 'pixelated';
 		this.ctx = this.canvas.getContext( '2d' );
 		this.canvas.width = this.config.width;
 		this.canvas.height = this.config.height;
@@ -33,22 +34,30 @@ export default class DrawSystem extends System {
 		ctx.fillStyle = '#ff0000';
 
 		ctx.strokeStyle = '#FFFFFF';
+		let drawCalls = 0;
+
 		this.entities.forEach( entity => {
 			let position = entity.components.position;
+
+			// Culling
+			if ( position.x < 0 || position.x > this.config.width ||
+				position.y < 0 || position.y > this.config.height ) {
+					return;
+				}
+
 			let sprite = entity.components.sprite;
 
-			// ctx.strokeRect( position.x, position.y, 16, 16 );
-			if ( sprite.image.complete ) {
-				ctx.setTransform( sprite.scale, 0, 0, sprite.scale, position.x, position.y ); // sets scale and origin
-  				ctx.rotate( position.angle );
-				
-				ctx.drawImage( sprite.image, 0, 0, 16, 16, -8, -8, 16, 16 );
+			ctx.setTransform( sprite.scale, 0, 0, sprite.scale, position.x, position.y ); // sets scale and origin
+			ctx.rotate( position.angle );
+			// ctx.strokeRect( 0, 0, sprite.width, sprite.height );			
+			ctx.drawImage( sprite.image, sprite.originX, sprite.originY, sprite.width, sprite.height, 0, 0, sprite.displayWidth, sprite.displayHeight );
+			drawCalls++;
 
-				ctx.setTransform( 1, 0, 0, 1, 0, 0 );
-			}
+			ctx.setTransform( 1, 0, 0, 1, 0, 0 );
 		} );
 
 		ctx.font = '14px sans-serif';
-		ctx.fillText( 'FPS: ' + this.scene.game.fps, 10, 10 );
+		ctx.fillText( 'FPS: ' + this.scene.game.fps, 10, 15 );
+		ctx.fillText( 'SPRITES DRAWN: ' + drawCalls, 10, 30 );
 	}
 }

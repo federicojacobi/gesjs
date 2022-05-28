@@ -2,7 +2,14 @@ export default class Scene {
 	constructor( game ) {
 		this.entities = [];
 		this.systems = [];
+		this.game = game;
 	}
+
+	load( id, type, resource ) {
+		this.game.resourceManager.load( id, type, resource );
+	}
+
+	preload() {}
 
 	create() {}
 
