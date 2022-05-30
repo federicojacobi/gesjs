@@ -61,6 +61,6 @@ export default class DrawSystem extends System {
 
 		ctx.font = '14px sans-serif';
 		ctx.fillText( 'FPS: ' + this.scene.game.fps, 10, 15 );
-		ctx.fillText( 'SPRITES DRAWN: ' + drawCalls, 10, 30 );
+		ctx.fillText( 'SPRITES: ' + drawCalls, 10, 30 );
 	}
 }

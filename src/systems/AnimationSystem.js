@@ -19,23 +19,27 @@ export default class AnimationSystem extends System {
 			let sprite = entity.components.sprite;
 			let state = entity.components.animation;
 			let animation = this.scene.game.animationManager.get( state.key );
-			state.elapsed += delta;
+			let image = this.scene.game.resourceManager.get( animation.frames[ state.currentFrame ].key );
+			let fullWidth = image.width / sprite.width;
+			
+			sprite.key = animation.frames[ state.currentFrame ].key;
+			sprite.originX = ( animation.frames[ state.currentFrame ].index % fullWidth ) * sprite.width;
+			sprite.originY = ( Math.floor( animation.frames[ state.currentFrame ].index / fullWidth ) * sprite.height );
 
-			if ( state.elapsed >= animation[ state.currentFrame ].duration ) {
+			if ( state.elapsed >= animation.frames[ state.currentFrame ].duration ) {
 				state.currentFrame++;
 				state.elapsed = 0;
-				if ( state.currentFrame === animation.length ) {
-					state.currentFrame = 0;
+				if ( state.currentFrame === animation.frames.length ) {
+					if ( animation.loop ) {
+						state.currentFrame = 0;
+					} else {
+						entity.removeComponent( entity.components.animation );
+						return;
+					}
 				}
 			}
 
-			let image = this.scene.game.resourceManager.get( animation[ state.currentFrame ].key );
-			let fullWidth = image.width / sprite.width;
-			let fullHeight = image.height / sprite.height;
-
-			sprite.key = animation[ state.currentFrame ].key;
-			sprite.originX = ( animation[ state.currentFrame ].index % fullWidth ) * sprite.width;
-			sprite.originY = ( Math.floor( animation[ state.currentFrame ].index / fullWidth ) * sprite.height );
+			state.elapsed += delta;
 		} );
 	}
 }

@@ -11,4 +11,9 @@ export default class Entity {
 		this.components[ component.type ] = component;
 		return this;
 	}
+
+	removeComponent( component ) {
+		delete this.components[ component.type ];
+		return this;
+	}
 }

@@ -43,7 +43,7 @@ export default class Game extends EventEmitter {
 	}
 
 	update( timestamp ) {
-		let delta = ( timestamp - lastFrameTimestamp ) / 1000;
+		let delta = ( timestamp - lastFrameTimestamp );
 		lastFrameTimestamp = timestamp;
 	
 		this.activeScene.preupdate( delta, timestamp );
@@ -53,10 +53,11 @@ export default class Game extends EventEmitter {
 		this.activeScene.postupdate( delta, timestamp );
 	
 		this.animationFrame = requestAnimationFrame( this.update.bind( this ) );
-		this.frames ++;
+		this.frames++;
 		this.perSecond += delta;
-		if ( this.perSecond > 1 ) {
-			this.fps = Math.round( this.frames / this.perSecond );
+
+		if ( this.perSecond > 1000 ) {
+			this.fps = Math.round( this.frames / this.perSecond * 1000 );
 			this.perSecond = 0;
 			this.frames = 0;
 		}

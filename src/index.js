@@ -23,28 +23,31 @@ class Scene1 extends Scene {
 	}
 
 	create() {
-		this.game.animationManager.add( 'anim1', [
-			{
-				key: 'testImage',
-				duration: 1,
-				index: 176 + 22,
-			},
-			{
-				key: 'testImage',
-				duration: 1,
-				index: 177 + 22,
-			},
-			{
-				key: 'testImage',
-				duration: 1,
-				index: 178 + 22,
-			},
-			{
-				key: 'testImage',
-				duration: 1,
-				index: 179 + 22,
-			},
-		] );
+		this.game.animationManager.add( 'anim1', {
+			frames: [
+				{
+					key: 'testImage',
+					duration: 1000,
+					index: 176 + 22,
+				},
+				{
+					key: 'testImage',
+					duration: 1000,
+					index: 177 + 22,
+				},
+				{
+					key: 'testImage',
+					duration: 1000,
+					index: 178 + 22,
+				},
+				{
+					key: 'testImage',
+					duration: 1000,
+					index: 179 + 22,
+				},
+			],
+			loop: true,
+		} );
 		this.systems.push( new AnimationSystem( this ) );
 		this.systems.push( new PhysicsSystem( this ) );
 		this.systems.push( new DrawSystem( this ) );
@@ -80,7 +83,7 @@ class Scene1 extends Scene {
 					displayHeight: 16,
 					originX: 16 * Math.floor( Math.random() * 20 ),
 					originY: 16 * Math.floor( Math.random() * 10 ),
-					scale: 1
+					scale: 2
 				} ) );
 
 			if ( Math.random() > 0.5 ) {
