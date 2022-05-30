@@ -21,7 +21,7 @@ export default class DrawSystem extends System {
 
 	query() {
 		this.entities = this.scene.entities.filter( 
-			entity => entity.components.hasOwnProperty( 'position' ) && entity.components.hasOwnProperty( 'sprite' )
+			entity => entity.components.hasOwnProperty( 'body' ) && entity.components.hasOwnProperty( 'sprite' )
 		);
 	}
 
@@ -37,19 +37,19 @@ export default class DrawSystem extends System {
 		let drawCalls = 0;
 
 		this.entities.forEach( entity => {
-			let position = entity.components.position;
+			let body = entity.components.body;
 
 			// Culling
-			if ( position.x < 0 || position.x > this.config.width ||
-				position.y < 0 || position.y > this.config.height ) {
+			if ( (body.x + body.width) < 0 || body.x > this.config.width ||
+				(body.y + body.height) < 0 || body.y > this.config.height ) {
 					return;
 				}
 
 			let sprite = entity.components.sprite;
 
-			ctx.setTransform( sprite.scale, 0, 0, sprite.scale, position.x, position.y ); // sets scale and origin
-			ctx.rotate( position.angle );
-			// ctx.strokeRect( 0, 0, sprite.width, sprite.height );			
+			ctx.setTransform( sprite.scale, 0, 0, sprite.scale, body.x, body.y ); // sets scale and origin
+			ctx.rotate( body.angle );
+			ctx.strokeRect( 0, 0, body.width, body.height );			
 			ctx.drawImage( sprite.image, sprite.originX, sprite.originY, sprite.width, sprite.height, 0, 0, sprite.displayWidth, sprite.displayHeight );
 			drawCalls++;
 
