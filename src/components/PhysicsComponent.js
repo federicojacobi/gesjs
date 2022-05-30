@@ -9,6 +9,10 @@ export default class PhysicsComponent extends Component {
 				x: 0,
 				y: 0
 			},
+			acceleration: {
+				x: 0,
+				y: 0
+			},
 			angularVelocity: 0,
 			... args
 		};

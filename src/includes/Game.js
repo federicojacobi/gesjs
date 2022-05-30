@@ -1,3 +1,4 @@
+import AnimationManager from "./AnimationManager";
 import EventEmitter from "./EventEmitter";
 import ResourceManager from "./ResourceManager";
 
@@ -22,6 +23,7 @@ export default class Game extends EventEmitter {
 		this.fps = 0;
 
 		this.resourceManager = new ResourceManager();
+		this.animationManager = new AnimationManager();
 
 		this.init();
 	}

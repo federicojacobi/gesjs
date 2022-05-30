@@ -49,8 +49,11 @@ export default class DrawSystem extends System {
 
 			ctx.setTransform( sprite.scale, 0, 0, sprite.scale, body.x, body.y ); // sets scale and origin
 			ctx.rotate( body.angle );
-			ctx.strokeRect( 0, 0, body.width, body.height );			
-			ctx.drawImage( sprite.image, sprite.originX, sprite.originY, sprite.width, sprite.height, 0, 0, sprite.displayWidth, sprite.displayHeight );
+			// ctx.strokeRect( 0, 0, body.width, body.height );		
+			
+			let image = this.scene.game.resourceManager.get( sprite.key );
+
+			ctx.drawImage( image, sprite.originX, sprite.originY, sprite.width, sprite.height, 0, 0, sprite.displayWidth, sprite.displayHeight );
 			drawCalls++;
 
 			ctx.setTransform( 1, 0, 0, 1, 0, 0 );

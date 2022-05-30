@@ -1,14 +1,21 @@
 import './style.css';
-import DrawSystem from './systems/DrawSystem';
+
 import Entity from './includes/Entity';
+
 import BodyComponent from './components/BodyComponent';
 import PhysicsComponent from './components/PhysicsComponent';
+import SpriteComponent from './components/SpriteComponent';
+
 import PhysicsSystem from './systems/PhysicsSystem';
+import AnimationSystem from './systems/AnimationSystem';
+import DrawSystem from './systems/DrawSystem';
+
 import Scene from './includes/Scene';
 import Game from './includes/Game';
 
 import TestImage from './assets/consumables.png';
-import SpriteComponent from './components/SpriteComponent';
+import AnimationComponent from './components/AnimationComponent';
+
 
 class Scene1 extends Scene {
 	preload() {
@@ -16,19 +23,41 @@ class Scene1 extends Scene {
 	}
 
 	create() {
+		this.game.animationManager.add( 'anim1', [
+			{
+				key: 'testImage',
+				duration: 1,
+				index: 176 + 22,
+			},
+			{
+				key: 'testImage',
+				duration: 1,
+				index: 177 + 22,
+			},
+			{
+				key: 'testImage',
+				duration: 1,
+				index: 178 + 22,
+			},
+			{
+				key: 'testImage',
+				duration: 1,
+				index: 179 + 22,
+			},
+		] );
+		this.systems.push( new AnimationSystem( this ) );
 		this.systems.push( new PhysicsSystem( this ) );
 		this.systems.push( new DrawSystem( this ) );
 
-		for ( let i = 0; i < 100; i++ ) {
+		for ( let i = 0; i < 2000; i++ ) {
 			let entity = new Entity( this, i );
 			let body = new BodyComponent( {
 				// x: Math.random() * this.game.config.width,
 				x: this.game.config.width / 2,
 				// y: Math.random() * this.game.config.height,
 				y: this.game.config.height / 2,
-				width: 32,
-				height: 32,
-				angularSpeed: Math.random() * Math.PI
+				width: 16,
+				height: 16,
 			} );
 
 			let image = this.game.resourceManager.get( 'testImage' );
@@ -36,7 +65,6 @@ class Scene1 extends Scene {
 			entity.
 				addComponent( body ).
 				// addComponent( new BodyComponent( this.game.config.width / 2, this.game.config.height / 2 ) ).
-				// addComponent( new PhysicsComponent() ).
 				addComponent( new PhysicsComponent( {
 					velocity: {
 						x:  Math.random() * 150,
@@ -45,7 +73,7 @@ class Scene1 extends Scene {
 					angularVelocity: Math.random() * Math.PI
 				} ) ).
 				addComponent( new SpriteComponent( {
-					image: image,
+					key: 'testImage',
 					width: 16,
 					height: 16,
 					displayWidth: 16,
@@ -54,6 +82,12 @@ class Scene1 extends Scene {
 					originY: 16 * Math.floor( Math.random() * 10 ),
 					scale: 1
 				} ) );
+
+			if ( Math.random() > 0.5 ) {
+				entity.addComponent( new AnimationComponent( {
+					key: 'anim1'
+				} ) );
+			}
 
 			this.entities.push( entity );
 		}
