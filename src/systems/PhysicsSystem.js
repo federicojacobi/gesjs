@@ -1,6 +1,16 @@
 import System from "../includes/System";
 
 export default class PhysicsSystem extends System {
+	constructor( scene, config ) {
+		super( scene );
+
+		this.config = {
+			width: 640,
+			height: 480,
+			...config
+		};
+	}
+
 	query() {
 		this.entities = this.scene.entities.filter( e => e.components.hasOwnProperty( 'body' ) && e.components.hasOwnProperty( 'physics' ) );
 	}

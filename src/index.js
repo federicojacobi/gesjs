@@ -50,20 +50,26 @@ class Scene1 extends Scene {
 			loop: true,
 		} );
 		this.systems.push( new AnimationSystem( this ) );
-		this.systems.push( new PhysicsSystem( this ) );
+		this.systems.push( new PhysicsSystem( this, {
+			width: this.game.config.width,
+			height: this.game.config.height
+		} ) );
 		// this.systems.push( new DrawSystem( this, {
-		// 	width: 640,
-		// 	height: 480
+		// 	width: this.game.config.width,
+		// 	height: this.game.config.height
 		// } ) );
-		this.systems.push( new AsciiRenderer( this ) );
+		this.systems.push( new AsciiRenderer( this, {
+			width: this.game.config.width,
+			height: this.game.config.height
+		} ) );
 
 		for ( let i = 0; i < 2000; i++ ) {
 			let entity = new Entity( this, i );
 			let body = new BodyComponent( {
-				// x: Math.random() * this.game.config.width,
-				x: this.game.config.width / 2,
-				// y: Math.random() * this.game.config.height,
-				y: this.game.config.height / 2,
+				x: Math.random() * this.game.config.width,
+				// x: this.game.config.width / 2,
+				y: Math.random() * this.game.config.height,
+				// y: this.game.config.height / 2,
 				width: 16,
 				height: 16,
 			} );
@@ -72,7 +78,7 @@ class Scene1 extends Scene {
 
 			entity.
 				addComponent( body ).
-				// addComponent( new BodyComponent( this.game.config.width / 2, this.game.config.height / 2 ) ).
+				addComponent( new BodyComponent( this.game.config.width / 2, this.game.config.height / 2 ) ).
 				addComponent( new PhysicsComponent( {
 					velocity: {
 						x:  Math.random() * 150,
