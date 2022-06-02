@@ -15,6 +15,7 @@ import Game from './includes/Game';
 
 import TestImage from './assets/consumables.png';
 import AnimationComponent from './components/AnimationComponent';
+import AsciiRenderer from './systems/AsciiRenderer';
 
 
 class Scene1 extends Scene {
@@ -50,7 +51,11 @@ class Scene1 extends Scene {
 		} );
 		this.systems.push( new AnimationSystem( this ) );
 		this.systems.push( new PhysicsSystem( this ) );
-		this.systems.push( new DrawSystem( this ) );
+		// this.systems.push( new DrawSystem( this, {
+		// 	width: 640,
+		// 	height: 480
+		// } ) );
+		this.systems.push( new AsciiRenderer( this ) );
 
 		for ( let i = 0; i < 2000; i++ ) {
 			let entity = new Entity( this, i );
