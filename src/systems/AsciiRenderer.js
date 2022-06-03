@@ -5,21 +5,23 @@ export default class AsciiRenderer extends System {
 		super( scene );
 
 		this.config = {
-			width: 640,
-			height: 480,
+			camera: null,
 			fontSize: '12px',
 			...config
 		};
+		this.camera = this.config.camera.components.body;
 
 		this.canvas = document.createElement( 'pre' );
 		let style = {
 			backgroundColor: 'black',
-			width: this.config.width + 'px',
-			height: this.config.height + 'px',
+			width: this.camera.width + 'px',
+			height: this.camera.height + 'px',
 			fontFamily: 'courier',
 			color: 'white',
 			lineHeight: '1',
 			fontSize: this.config.fontSize,
+			margin: '0 auto',
+			display: 'block',
 		}
 		for ( let key in style ) {
 			this.canvas.style[ key ] = style[ key ];
@@ -30,14 +32,14 @@ export default class AsciiRenderer extends System {
 		this.fontSize = parseInt( this.config.fontSize );
 		this.config.fontRatio = 0.6;
 
-		this.columns = Math.round( this.config.width / this.fontSize / this.config.fontRatio );
-		this.rows = Math.round( this.config.height / this.fontSize );
+		this.columns = Math.round( this.camera.width / this.fontSize / this.config.fontRatio );
+		this.rows = Math.round( this.camera.height / this.fontSize );
 
 		this.screen = [];
 		for ( let row = 0; row < this.rows; row++ ) {
 			this.screen.push( [] );
 			for ( let col = 0; col < this.columns; col++ ) {
-				this.screen[ row ][ col ] = null;
+				this.screen[ row ][ col ] = ' ';
 			}
 		}
 
@@ -47,24 +49,24 @@ export default class AsciiRenderer extends System {
 	clearScreen() {
 		for ( let row = 0; row < this.screen.length; row++ ) {
 			for ( let col = 0; col < this.screen[ row ].length; col++ ) {
-				this.screen[ row ][ col ] = ' ';
+				this.putPixel( row, col, ' ' );
 			}
 		}
 	}
 
 	text( row, col, text ) {
 		for ( let i = 0; i < text.length; i++ ) {
-			this.screen[ row ][ col + i ] = text[i];
+			this.putPixel( row, col + i, text[i] );
 		}
 	}
 
-	putPixel( row, col ) {
-		if ( this.screen[ row ][ col ] === ' ' ) {
-			this.screen[ row ][ col ] = 'O';
-		} else {
-			this.screen[ row ][ col ] = 'X';
+	putPixel( row, col, char ) {
+		if ( row >= this.rows || row < 0 || col >= this.columns || col < 0 ) {
+			return;
 		}
-		
+		if ( char ) {
+			this.screen[ row ][ col ] = char;
+		}
 	}
 
 	query() {
@@ -83,12 +85,12 @@ export default class AsciiRenderer extends System {
 			let body = entity.components.body;
 
 			// Culling
-			if ( (body.x + body.width) < 0 || body.x > this.config.width ||
-				(body.y + body.height) < 0 || body.y > this.config.height ) {
+			if ( (body.x + body.width) < this.camera.x || body.x > ( this.camera.x + this.camera.width ) ||
+				(body.y + body.height) < this.camera.y || body.y > ( this.camera.y + this.camera.height ) ) {
 				return;
 			}
 
-			this.putPixel( Math.floor( body.y / this.fontSize ), Math.floor( body.x / this.fontSize / this.config.fontRatio ) );
+			this.putPixel( Math.floor( (body.y - this.camera.y) / this.fontSize ), Math.floor( (body.x - this.camera.x)/ this.fontSize / this.config.fontRatio ), 'O' );
 			drawCalls++;
 		} );
 

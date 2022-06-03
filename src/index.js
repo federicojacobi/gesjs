@@ -16,6 +16,7 @@ import Game from './includes/Game';
 import TestImage from './assets/consumables.png';
 import AnimationComponent from './components/AnimationComponent';
 import AsciiRenderer from './systems/AsciiRenderer';
+import CameraComponent from './components/CameraComponent';
 
 
 class Scene1 extends Scene {
@@ -54,22 +55,35 @@ class Scene1 extends Scene {
 			width: this.game.config.width,
 			height: this.game.config.height
 		} ) );
-		// this.systems.push( new DrawSystem( this, {
-		// 	width: this.game.config.width,
-		// 	height: this.game.config.height
-		// } ) );
+
+		let camera = new Entity( this, 'cam' );
+		camera.addComponent( new CameraComponent() ).
+		addComponent( new BodyComponent( {
+			x: 0,
+			y: 0,
+			width: 320,
+			height: 240
+		} ) ).
+		addComponent( new PhysicsComponent( {
+			velocity: {
+				x: 50,
+				y: 50
+			},
+		} ) );
+		this.entities.push( camera );
+
+		this.systems.push( new DrawSystem( this, {
+			camera: camera
+		} ) );
 		this.systems.push( new AsciiRenderer( this, {
-			width: this.game.config.width,
-			height: this.game.config.height
+			camera: camera
 		} ) );
 
-		for ( let i = 0; i < 2000; i++ ) {
+		for ( let i = 0; i < 100; i++ ) {
 			let entity = new Entity( this, i );
 			let body = new BodyComponent( {
 				x: Math.random() * this.game.config.width,
-				// x: this.game.config.width / 2,
 				y: Math.random() * this.game.config.height,
-				// y: this.game.config.height / 2,
 				width: 16,
 				height: 16,
 			} );
@@ -78,13 +92,12 @@ class Scene1 extends Scene {
 
 			entity.
 				addComponent( body ).
-				addComponent( new BodyComponent( this.game.config.width / 2, this.game.config.height / 2 ) ).
 				addComponent( new PhysicsComponent( {
-					velocity: {
-						x:  Math.random() * 150,
-						y: Math.random() * 100
-					},
-					angularVelocity: Math.random() * Math.PI
+					// velocity: {
+					// 	x:  Math.random() * 150,
+					// 	y: Math.random() * 100
+					// },
+					//angularVelocity: Math.random() * Math.PI
 				} ) ).
 				addComponent( new SpriteComponent( {
 					key: 'testImage',
@@ -94,7 +107,7 @@ class Scene1 extends Scene {
 					displayHeight: 16,
 					originX: 16 * Math.floor( Math.random() * 20 ),
 					originY: 16 * Math.floor( Math.random() * 10 ),
-					scale: 2
+					scale: 1
 				} ) );
 
 			if ( Math.random() > 0.5 ) {
@@ -113,7 +126,7 @@ class Scene1 extends Scene {
 }
 
 window.game = new Game( {
-	width: 640,
-	height: 480,
+	width: 1000,
+	height: 1000,
 	scenes: [ new Scene1() ],
 } );
