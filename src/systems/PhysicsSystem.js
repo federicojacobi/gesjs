@@ -24,12 +24,26 @@ export default class PhysicsSystem extends System {
 			body.y += ( velocity.y * delta ) / 1000;
 			body.angle += entity.components.physics.angularVelocity * delta / 1000;
 
-			if ( body.x + body.width > this.scene.game.config.width || body.x <= 0 ) {
+			if ( body.x + body.width > this.scene.game.config.width || body.x < 0 ) {
 				velocity.x *= -1;
 			}
 
-			if ( body.y + body.height > this.scene.game.config.height || body.y <= 0 ) {
+			if ( body.x < 0 ) {
+				body.x = 0;
+			}
+			if ( ( body.x + body.width ) > this.scene.game.config.width ) {
+				body.x = this.scene.game.config.width - body.width;
+			}
+
+			if ( body.y + body.height > this.scene.game.config.height || body.y < 0 ) {
 				velocity.y *= -1;
+			}
+
+			if ( body.y < 0 ) {
+				body.y = 0;
+			}
+			if ( ( body.y + body.heighy ) > this.scene.game.config.height ) {
+				body.y = this.scene.game.config.height - body.height;
 			}
 		} );
 	}

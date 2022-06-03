@@ -6,8 +6,8 @@ export default class AnimationComponent extends Component {
 
 		let config = {
 			key: '',
-            elapsed: 0,
             currentFrame: 0,
+			elapsed: 0,
 			... args
 		};
 

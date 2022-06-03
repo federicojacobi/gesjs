@@ -5,19 +5,20 @@ import Entity from './includes/Entity';
 import BodyComponent from './components/BodyComponent';
 import PhysicsComponent from './components/PhysicsComponent';
 import SpriteComponent from './components/SpriteComponent';
+import CameraComponent from './components/CameraComponent';
+import AnimationComponent from './components/AnimationComponent';
+import DebugTextComponent from './components/DebugTextComponent';
 
 import PhysicsSystem from './systems/PhysicsSystem';
 import AnimationSystem from './systems/AnimationSystem';
 import DrawSystem from './systems/DrawSystem';
+import AsciiRenderer from './systems/AsciiRenderer';
+import DebugTextSystem from './systems/DebugTextSystem';
 
 import Scene from './includes/Scene';
 import Game from './includes/Game';
 
 import TestImage from './assets/consumables.png';
-import AnimationComponent from './components/AnimationComponent';
-import AsciiRenderer from './systems/AsciiRenderer';
-import CameraComponent from './components/CameraComponent';
-
 
 class Scene1 extends Scene {
 	preload() {
@@ -69,7 +70,8 @@ class Scene1 extends Scene {
 				x: 50,
 				y: 50
 			},
-		} ) );
+		} ) ).
+		addComponent( new DebugTextComponent() );
 		this.entities.push( camera );
 
 		this.systems.push( new DrawSystem( this, {
@@ -79,7 +81,9 @@ class Scene1 extends Scene {
 			camera: camera
 		} ) );
 
-		for ( let i = 0; i < 100; i++ ) {
+		this.systems.push( new DebugTextSystem( this ) );
+
+		for ( let i = 0; i < 1000; i++ ) {
 			let entity = new Entity( this, i );
 			let body = new BodyComponent( {
 				x: Math.random() * this.game.config.width,
@@ -97,7 +101,7 @@ class Scene1 extends Scene {
 					// 	x:  Math.random() * 150,
 					// 	y: Math.random() * 100
 					// },
-					//angularVelocity: Math.random() * Math.PI
+					angularVelocity: Math.random() * Math.PI
 				} ) ).
 				addComponent( new SpriteComponent( {
 					key: 'testImage',
@@ -114,6 +118,10 @@ class Scene1 extends Scene {
 				entity.addComponent( new AnimationComponent( {
 					key: 'anim1'
 				} ) );
+			}
+
+			if ( i == 10 ) {
+				entity.addComponent( new DebugTextComponent() );
 			}
 
 			this.entities.push( entity );
