@@ -7,17 +7,16 @@ export default class AnimationSystem extends System {
 	}
 
 	query() {
-		this.entities = this.scene.entities.filter( 
-			entity => entity.components.hasOwnProperty( 'sprite' ) && entity.components.hasOwnProperty( 'animation' )
-		);
+		this.entities = this.scene.entities.query( [ 'sprite', 'animation' ] );
 	}
 
 	update( delta ) {
 		this.query();
 
 		this.entities.forEach( entity => {
-			let sprite = entity.components.sprite;
-			let state = entity.components.animation;
+			let components = this.scene.components.get( entity );
+			let sprite = components.sprite;
+			let state = components.animation;
 			let animation = this.scene.game.animationManager.get( state.key );
 			let image = this.scene.game.resourceManager.get( animation.frames[ state.currentFrame ].key );
 			let fullWidth = image.width / sprite.width;

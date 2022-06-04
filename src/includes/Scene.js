@@ -1,7 +1,16 @@
+import ComponentManager from "./ComponentManager";
+import EntityManager from "./EntityManager";
+import SystemManager from "./SystemManager";
+
 export default class Scene {
 	constructor( game ) {
-		this.entities = [];
-		this.systems = [];
+		
+		this.components = new ComponentManager();
+		
+		this.entities = new EntityManager( this.components );
+
+		this.systems = new SystemManager();
+
 		this.game = game;
 	}
 

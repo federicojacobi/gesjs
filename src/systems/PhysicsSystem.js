@@ -12,17 +12,17 @@ export default class PhysicsSystem extends System {
 	}
 
 	query() {
-		this.entities = this.scene.entities.filter( e => e.components.hasOwnProperty( 'body' ) && e.components.hasOwnProperty( 'physics' ) );
+		this.entities = this.scene.entities.query( [ 'body', 'physics' ] );
 	}
 	update( delta ) {
 		this.query();
 		this.entities.forEach( entity => {
-			let body = entity.components.body;
-			let velocity = entity.components.physics.velocity;
+			let body = this.scene.components.get( entity ).body;
+			let velocity = this.scene.components.get( entity ).physics.velocity;
 
 			body.x += ( velocity.x * delta ) / 1000;
 			body.y += ( velocity.y * delta ) / 1000;
-			body.angle += entity.components.physics.angularVelocity * delta / 1000;
+			body.angle += this.scene.components.get( entity ).physics.angularVelocity * delta / 1000;
 
 			if ( body.x + body.width > this.scene.game.config.width || body.x < 0 ) {
 				velocity.x *= -1;

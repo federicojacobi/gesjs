@@ -8,7 +8,8 @@ export default class DrawSystem extends System {
 			camera: null,
 			...config
 		};
-		this.camera = this.config.camera.components.body;
+
+		this.camera = this.scene.components.get( this.config.camera ).body;
 
 		this.canvas = document.createElement( 'canvas' );
 		this.canvas.style.backgroundColor = 'black';
@@ -24,9 +25,10 @@ export default class DrawSystem extends System {
 	}
 
 	query() {
-		this.entities = this.scene.entities.filter( 
-			entity => entity.components.hasOwnProperty( 'body' ) && entity.components.hasOwnProperty( 'sprite' )
-		);
+		this.entities = this.scene.entities.query( [ 'body', 'sprite' ] );
+		// this.entities = this.scene.entities.filter( 
+		// 	entity => entity.components.hasOwnProperty( 'body' ) && entity.components.hasOwnProperty( 'sprite' )
+		// );
 	}
 
 	update() {
@@ -43,7 +45,7 @@ export default class DrawSystem extends System {
 		let drawCalls = 0;
 
 		this.entities.forEach( entity => {
-			let body = entity.components.body;
+			let body = this.scene.components.get( entity ).body;
 
 			// Culling
 			if ( (body.x + body.width) < this.camera.x || body.x > this.camera.x + this.camera.width ||
@@ -51,11 +53,11 @@ export default class DrawSystem extends System {
 				return;
 			}
 
-			let sprite = entity.components.sprite;
+			let sprite = this.scene.components.get( entity ).sprite;
 
 			ctx.setTransform( sprite.scale, 0, 0, sprite.scale, body.x - this.camera.x, body.y - this.camera.y ); // sets scale and origin
 			ctx.rotate( body.angle );
-			if ( entity.components.debugText ) {
+			if ( this.scene.components.get( entity ).debugText ) {
 				ctx.strokeRect( -body.width * body.originX, -body.height * body.originY, body.width, body.height );
 			}
 			

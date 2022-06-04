@@ -9,7 +9,7 @@ export default class AsciiRenderer extends System {
 			fontSize: '12px',
 			...config
 		};
-		this.camera = this.config.camera.components.body;
+		this.camera = this.scene.components.get( this.config.camera ).body;
 
 		this.canvas = document.createElement( 'pre' );
 		let style = {
@@ -69,20 +69,14 @@ export default class AsciiRenderer extends System {
 		}
 	}
 
-	query() {
-		return this.scene.entities.filter( 
-			entity => entity.components.hasOwnProperty( 'body' ) && entity.components.hasOwnProperty( 'sprite' )
-		);
-	}
-
 	update() {
-		let entities = this.query();
+		let entities = this.scene.entities.query( [ 'body', 'sprite' ] );
 		this.canvas.innerHTML = '';
 		this.clearScreen();
 		let drawCalls = 0;
 
 		entities.forEach( entity => {
-			let body = entity.components.body;
+			let body = this.scene.components.get( entity ).body;
 
 			// Culling
 			if ( (body.x + body.width) < this.camera.x || body.x > ( this.camera.x + this.camera.width ) ||

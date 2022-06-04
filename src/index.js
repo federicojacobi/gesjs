@@ -51,59 +51,59 @@ class Scene1 extends Scene {
 			],
 			loop: true,
 		} );
-		this.systems.push( new AnimationSystem( this ) );
-		this.systems.push( new PhysicsSystem( this, {
+
+		this.systems.add( new AnimationSystem( this ) );
+		this.systems.add( new PhysicsSystem( this, {
 			width: this.game.config.width,
 			height: this.game.config.height
 		} ) );
 
-		let camera = new Entity( this, 'cam' );
-		camera.addComponent( new CameraComponent() ).
-		addComponent( new BodyComponent( {
-			x: 0,
-			y: 0,
-			width: 320,
-			height: 240
-		} ) ).
-		addComponent( new PhysicsComponent( {
-			velocity: {
-				x: 50,
-				y: 50
-			},
-		} ) ).
-		addComponent( new DebugTextComponent() );
-		this.entities.push( camera );
+		let camera = new Entity( 'cam' );
 
-		this.systems.push( new DrawSystem( this, {
+		this.entities.add( camera ).
+			addComponent( camera, new CameraComponent() ).
+			addComponent( camera, new BodyComponent( {
+				x: 0,
+				y: 0,
+				width: 320,
+				height: 240
+			} ) ).
+			addComponent( camera, new PhysicsComponent( {
+				velocity: {
+					x: 50,
+					y: 50
+				},
+			} ) ).
+			addComponent( camera, new DebugTextComponent() );
+
+		this.systems.add( new DrawSystem( this, {
 			camera: camera
 		} ) );
-		this.systems.push( new AsciiRenderer( this, {
-			camera: camera
-		} ) );
+		// this.systems.add( new AsciiRenderer( this, {
+		// 	camera: camera
+		// } ) );
 
-		this.systems.push( new DebugTextSystem( this ) );
+		this.systems.add( new DebugTextSystem( this ) );
 
-		for ( let i = 0; i < 1000; i++ ) {
-			let entity = new Entity( this, i );
+		for ( let i = 0; i < 5000; i++ ) {
+			let entity = new Entity( i );
 			let body = new BodyComponent( {
-				x: Math.random() * this.game.config.width,
-				y: Math.random() * this.game.config.height,
+				x: Math.round( Math.random() * this.game.config.width ),
+				y: Math.round( Math.random() * this.game.config.height ),
 				width: 16,
 				height: 16,
 			} );
 
-			let image = this.game.resourceManager.get( 'testImage' );
-
-			entity.
-				addComponent( body ).
-				addComponent( new PhysicsComponent( {
-					// velocity: {
-					// 	x:  Math.random() * 150,
-					// 	y: Math.random() * 100
-					// },
+			this.entities.add( entity ).
+				addComponent( entity, body ).
+				addComponent( entity, new PhysicsComponent( {
+					velocity: {
+						x:  Math.random() * 150,
+						y: Math.random() * 100
+					},
 					angularVelocity: Math.random() * Math.PI
 				} ) ).
-				addComponent( new SpriteComponent( {
+				addComponent( entity, new SpriteComponent( {
 					key: 'testImage',
 					width: 16,
 					height: 16,
@@ -115,21 +115,19 @@ class Scene1 extends Scene {
 				} ) );
 
 			if ( Math.random() > 0.5 ) {
-				entity.addComponent( new AnimationComponent( {
+				this.entities.addComponent( entity, new AnimationComponent( {
 					key: 'anim1'
 				} ) );
 			}
 
 			if ( i == 10 ) {
-				entity.addComponent( new DebugTextComponent() );
+				this.entities.addComponent( entity, new DebugTextComponent() );
 			}
-
-			this.entities.push( entity );
 		}
 	}
 
 	update( delta ) {
-		this.systems.forEach( system => system.update( delta ) );
+		this.systems.update( delta );
 	}
 }
 

@@ -23,33 +23,28 @@ export default class DebugTextSystem extends System {
 		this.container.innerHTML = '';
 	}
 
-	query() {
-		return this.scene.entities.filter( 
-			entity => entity.components.hasOwnProperty( 'debugText' )
-		);
-	}
-
 	update() {
-		let entities = this.query();
+		let entities = this.scene.entities.query( [ 'debugText' ] );
 		this.clearScreen();
 		
 		let string = '';
 		entities.forEach( entity => {
 			string += `ENTITY: ${entity.name}\n`;
 			string += 'COMPONENTS:\n';
-			for ( let component in entity.components ) {
+			let components = this.scene.components.get( entity );
+			for ( let component in components ) {
 				string += `\t${component}:\n`;
-				for ( let key in entity.components[ component ] ) {
+				for ( let key in components[ component ] ) {
 					if ( key == 'type' || key == 'scene' ) {
 						continue;
 					}
 					string += `\t\t${key}: `;
-					if ( typeof entity.components[component][key] == 'object' ) {
-						for ( let k in entity.components[component][key] ) {
-							string += `${k}->${entity.components[component][key][k]} `;
+					if ( typeof components[component][key] == 'object' ) {
+						for ( let k in components[component][key] ) {
+							string += `${k}->${components[component][key][k]} `;
 						}
 					} else {
-						string += `${entity.components[component][key]}`;
+						string += `${components[component][key]}`;
 					}
 				}
 				string += '\n';
