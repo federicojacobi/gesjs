@@ -26,16 +26,12 @@ export default class DrawSystem extends System {
 
 	query() {
 		this.entities = this.scene.entities.query( [ 'body', 'sprite' ] );
-		// this.entities = this.scene.entities.filter( 
-		// 	entity => entity.components.hasOwnProperty( 'body' ) && entity.components.hasOwnProperty( 'sprite' )
-		// );
 	}
 
 	update() {
 		this.query();
 		let ctx = this.ctx;
-		// ctx.clearRect( 0, 0, this.camera.width, this.camera.height );
-		ctx.clearRect( 0, 0, this.scene.game.config.width, this.scene.game.config.height );
+		ctx.clearRect( 0, 0, this.camera.width, this.camera.height );
 
 		ctx.lineWidth = 1;
 		ctx.fillStyle = '#FFFFFF';

@@ -65,15 +65,15 @@ class Scene1 extends Scene {
 			addComponent( camera, new BodyComponent( {
 				x: 0,
 				y: 0,
-				width: 320,
-				height: 240
+				width: 640,
+				height: 480
 			} ) ).
-			addComponent( camera, new PhysicsComponent( {
-				velocity: {
-					x: 50,
-					y: 50
-				},
-			} ) ).
+			// addComponent( camera, new PhysicsComponent( {
+			// 	velocity: {
+			// 		x: 50,
+			// 		y: 50
+			// 	},
+			// } ) ).
 			addComponent( camera, new DebugTextComponent() );
 
 		this.systems.add( new DrawSystem( this, {
@@ -83,7 +83,7 @@ class Scene1 extends Scene {
 		// 	camera: camera
 		// } ) );
 
-		this.systems.add( new DebugTextSystem( this ) );
+		// this.systems.add( new DebugTextSystem( this ) );
 
 		for ( let i = 0; i < 5000; i++ ) {
 			let entity = new Entity( i );
@@ -132,7 +132,7 @@ class Scene1 extends Scene {
 }
 
 window.game = new Game( {
-	width: 1000,
-	height: 1000,
+	width: 640,
+	height: 480,
 	scenes: [ new Scene1() ],
 } );
