@@ -8,7 +8,9 @@ import SpriteComponent from './components/SpriteComponent';
 import CameraComponent from './components/CameraComponent';
 import AnimationComponent from './components/AnimationComponent';
 import DebugTextComponent from './components/DebugTextComponent';
+import InputComponent from './components/InputComponent';
 
+import InputSystem from './systems/InputSystem';
 import PhysicsSystem from './systems/PhysicsSystem';
 import AnimationSystem from './systems/AnimationSystem';
 import DrawSystem from './systems/DrawSystem';
@@ -62,11 +64,12 @@ class Scene1 extends Scene {
 
 		this.entities.add( camera ).
 			addComponent( camera, new CameraComponent() ).
+			addComponent( camera, new PhysicsComponent() ).
 			addComponent( camera, new BodyComponent( {
 				x: 0,
 				y: 0,
-				width: 640,
-				height: 480
+				width: this.game.config.width,
+				height: this.game.config.height
 			} ) ).
 			// addComponent( camera, new PhysicsComponent( {
 			// 	velocity: {
@@ -83,9 +86,12 @@ class Scene1 extends Scene {
 		// 	camera: camera
 		// } ) );
 
+		this.systems.add( new InputSystem( this, {
+			camera: camera
+		} ) );
 		// this.systems.add( new DebugTextSystem( this ) );
 
-		for ( let i = 0; i < 5000; i++ ) {
+		for ( let i = 0; i < 20; i++ ) {
 			let entity = new Entity( i );
 			let body = new BodyComponent( {
 				x: Math.round( Math.random() * this.game.config.width ),
@@ -97,10 +103,10 @@ class Scene1 extends Scene {
 			this.entities.add( entity ).
 				addComponent( entity, body ).
 				addComponent( entity, new PhysicsComponent( {
-					velocity: {
-						x:  Math.random() * 150,
-						y: Math.random() * 100
-					},
+					// velocity: {
+					// 	x:  Math.random() * 150,
+					// 	y: Math.random() * 100
+					// },
 					angularVelocity: Math.random() * Math.PI
 				} ) ).
 				addComponent( entity, new SpriteComponent( {
@@ -121,7 +127,8 @@ class Scene1 extends Scene {
 			}
 
 			if ( i == 10 ) {
-				this.entities.addComponent( entity, new DebugTextComponent() );
+				this.entities.addComponent( entity, new DebugTextComponent() )
+				.addComponent( entity, new InputComponent() );
 			}
 		}
 	}
@@ -132,7 +139,7 @@ class Scene1 extends Scene {
 }
 
 window.game = new Game( {
-	width: 1280,
-	height: 960,
+	width: 640,
+	height: 480,
 	scenes: [ new Scene1() ],
 } );

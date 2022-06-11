@@ -29,6 +29,17 @@ export default class Game extends EventEmitter {
 	}
 
 	init() {
+
+		this.canvas = document.createElement( 'canvas' );
+		this.canvas.style.backgroundColor = 'black';
+		this.canvas.style.imageRendering = 'pixelated';
+		this.canvas.style.margin = '0 auto';
+		this.canvas.style.display = 'block';
+		this.canvas.width = this.config.width;
+		this.canvas.height = this.config.height;
+		this.canvas.tabIndex = 1;
+		document.body.appendChild( this.canvas );
+
 		this.activeScene = this.config.scenes[0];
 		this.config.scenes.forEach( scene => scene.game = this );
 		

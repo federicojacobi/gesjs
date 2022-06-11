@@ -10,18 +10,7 @@ export default class DrawSystem extends System {
 		};
 
 		this.camera = this.scene.components.get( this.config.camera ).body;
-
-		this.canvas = document.createElement( 'canvas' );
-		this.canvas.style.backgroundColor = 'black';
-		this.canvas.style.imageRendering = 'pixelated';
-		this.canvas.style.margin = '0 auto';
-		this.canvas.style.display = 'block';
-		this.ctx = this.canvas.getContext( '2d' );
-		this.canvas.width = this.camera.width;
-		// this.canvas.width = this.scene.game.config.width;
-		this.canvas.height = this.camera.height;
-		// this.canvas.height = this.scene.game.config.height;
-		document.body.appendChild( this.canvas );
+		this.ctx = scene.game.canvas.getContext( '2d' );
 	}
 
 	query() {
