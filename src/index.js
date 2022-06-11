@@ -132,7 +132,7 @@ class Scene1 extends Scene {
 }
 
 window.game = new Game( {
-	width: 640,
-	height: 480,
+	width: 1280,
+	height: 960,
 	scenes: [ new Scene1() ],
 } );
