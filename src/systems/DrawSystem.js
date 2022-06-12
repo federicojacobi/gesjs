@@ -29,14 +29,23 @@ export default class DrawSystem extends System {
 		// ctx.strokeRect( this.camera.x, this.camera.y, this.camera.width, this.camera.height );
 		let drawCalls = 0;
 
-		this.entities.forEach( entity => {
+		this.entities
+		.filter( ( entity ) => {
 			let body = this.scene.components.get( entity ).body;
-
 			// Culling
 			if ( (body.x + body.width) < this.camera.x || body.x > this.camera.x + this.camera.width ||
 				(body.y + body.height) < this.camera.y || body.y > this.camera.y + this.camera.height  ) {
-				return;
+				return false;
 			}
+			return true;
+		} )
+		.sort( ( a, b ) => {
+			let bodyA = this.scene.components.get( a ).body;
+			let bodyB = this.scene.components.get( b ).body;
+			return bodyA.z > bodyB.z ? 1: -1
+		} )
+		.forEach( entity => {
+			let body = this.scene.components.get( entity ).body;
 
 			let sprite = this.scene.components.get( entity ).sprite;
 

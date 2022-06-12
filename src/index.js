@@ -71,12 +71,7 @@ class Scene1 extends Scene {
 				width: this.game.config.width,
 				height: this.game.config.height
 			} ) ).
-			// addComponent( camera, new PhysicsComponent( {
-			// 	velocity: {
-			// 		x: 50,
-			// 		y: 50
-			// 	},
-			// } ) ).
+			// addComponent( camera, new InputComponent() ).
 			addComponent( camera, new DebugTextComponent() );
 
 		this.systems.add( new DrawSystem( this, {
@@ -127,8 +122,9 @@ class Scene1 extends Scene {
 			}
 
 			if ( i == 10 ) {
-				this.entities.addComponent( entity, new DebugTextComponent() )
-				.addComponent( entity, new InputComponent() );
+				this.entities.addComponent( entity, new DebugTextComponent() ).
+				addComponent( entity, new InputComponent() );
+				body.z = -15;
 			}
 		}
 	}

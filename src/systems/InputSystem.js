@@ -17,6 +17,7 @@ export default class InputSystem  extends System{
 
         this.canvas.addEventListener( 'pointerdown', ( e ) => {
             this.mouse.add( 'down' );
+            console.log( e.clientX + this.camera.x, e.clientY + this.camera.y );
         } );
 
         this.canvas.addEventListener( 'pointerup', ( e ) => {
