@@ -1,15 +1,10 @@
-import Component from "../includes/Component";
+const CameraComponent = function( args ) {
+	let config = {
+		... args
+	};
 
-export default class CameraComponent extends Component {
-	constructor( args ) {
-		super( 'camera' );
-
-		let config = {
-			... args
-		};
-
-		for ( const key in config ) {
-			this[key] = config[key];
-		}
+	for ( const key in config ) {
+		this[key] = config[key];
 	}
 }
+export default CameraComponent;

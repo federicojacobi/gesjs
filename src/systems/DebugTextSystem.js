@@ -1,7 +1,7 @@
 import System from "../includes/System";
 
 export default class DebugTextSystem extends System {
-	constructor( scene, config ) {
+	constructor( scene ) {
 		super( scene );
 
 		this.container = document.createElement( 'pre' );
@@ -24,32 +24,35 @@ export default class DebugTextSystem extends System {
 	}
 
 	update() {
-		let entities = this.scene.entities.query( [ 'debugText' ] );
+		let entities = this.componentManager.getEntitiesByComponents( [ 'DebugTextComponent' ] );
 		this.clearScreen();
 		
 		let string = '';
 		entities.forEach( entity => {
-			string += `ENTITY: ${entity.name}\n`;
+			string += `ENTITY: ${entity}\n`;
 			string += 'COMPONENTS:\n';
-			let components = this.scene.components.get( entity );
-			for ( let component in components ) {
-				string += `\t${component}:\n`;
-				for ( let key in components[ component ] ) {
-					if ( key == 'type' || key == 'scene' ) {
-						continue;
-					}
+			let components = this.componentManager.getComponentsByEntity( entity );
+			if ( ! components ) {
+				return;
+			}
+			const componentType = components.keys();
+
+			for ( let type of componentType ) {
+				string += `\t${type}:\n`;
+
+				let _component = components.get( type );
+				for ( let key in _component ) {
 					string += `\t\t${key}: `;
-					if ( typeof components[component][key] == 'object' ) {
-						for ( let k in components[component][key] ) {
-							string += `${k}->${components[component][key][k]} `;
+					if ( typeof _component[key] == 'object' ) {
+						for ( let k in _component[key] ) {
+							string += `${k}->${_component[key][k]} `;
 						}
 					} else {
-						string += `${components[component][key]}`;
+						string += `${_component[key]}`;
 					}
 				}
 				string += '\n';
 			}
-			
 		} );
 		this.container.innerHTML = string;
 	}

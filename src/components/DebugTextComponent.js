@@ -1,7 +1,5 @@
-import Component from "../includes/Component";
+// Add this component to see a quick log of it on the page.
 
-export default class DebugTextComponent extends Component {
-	constructor() {
-		super( 'debugText' );
-	}
-}
+const DebugTextComponent = function() {};
+
+export default DebugTextComponent;

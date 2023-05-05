@@ -1,24 +1,21 @@
 import './style.css';
 
-import Entity from './includes/Entity';
-
-import BodyComponent from './components/BodyComponent';
-import PhysicsComponent from './components/PhysicsComponent';
-import SpriteComponent from './components/SpriteComponent';
-import CameraComponent from './components/CameraComponent';
-import AnimationComponent from './components/AnimationComponent';
-import DebugTextComponent from './components/DebugTextComponent';
-
-import PhysicsSystem from './systems/PhysicsSystem';
-import AnimationSystem from './systems/AnimationSystem';
-import DrawSystem from './systems/DrawSystem';
-import AsciiRenderer from './systems/AsciiRenderer';
-import DebugTextSystem from './systems/DebugTextSystem';
-
 import Scene from './includes/Scene';
 import Game from './includes/Game';
 
 import TestImage from './assets/consumables.png';
+import BodyComponent from './components/BodyComponent';
+import PhysicsComponent from './components/PhysicsComponent';
+import SpriteComponent from './components/SpriteComponent';
+import AnimationComponent from './components/AnimationComponent';
+import DebugTextComponent from './components/DebugTextComponent';
+import CameraComponent from './components/CameraComponent';
+
+
+import DebugTextSystem from './systems/DebugTextSystem';
+import AnimationSystem from './systems/AnimationSystem';
+import PhysicsSystem from './systems/PhysicsSystem';
+import DrawSystem from './systems/DrawSystem';
 
 class Scene1 extends Scene {
 	preload() {
@@ -52,41 +49,29 @@ class Scene1 extends Scene {
 			loop: true,
 		} );
 
-		this.systems.add( new AnimationSystem( this ) );
-		this.systems.add( new PhysicsSystem( this, {
-			width: this.game.config.width,
-			height: this.game.config.height
-		} ) );
-
-		let camera = new Entity( 'cam' );
-
-		this.entities.add( camera ).
-			addComponent( camera, new CameraComponent() ).
-			addComponent( camera, new BodyComponent( {
+		let camera = this.entityManager.getNextEntity();
+		this.componentManager.add( camera, new CameraComponent() ).
+			add( camera, new BodyComponent( {
 				x: 0,
 				y: 0,
 				width: 640,
 				height: 480
 			} ) ).
-			// addComponent( camera, new PhysicsComponent( {
-			// 	velocity: {
-			// 		x: 50,
-			// 		y: 50
-			// 	},
-			// } ) ).
-			addComponent( camera, new DebugTextComponent() );
+			add( camera, new DebugTextComponent() );
 
-		this.systems.add( new DrawSystem( this, {
+		// this.systemManager.add( new DebugTextSystem( this ) );
+		this.systemManager.add( new AnimationSystem( this ) );
+		this.systemManager.add( new PhysicsSystem( this, {
+			width: this.game.config.width,
+			height: this.game.config.height
+		} ) );
+		this.systemManager.add( new DrawSystem( this, {
 			camera: camera
 		} ) );
-		// this.systems.add( new AsciiRenderer( this, {
-		// 	camera: camera
-		// } ) );
-
-		// this.systems.add( new DebugTextSystem( this ) );
+		
 
 		for ( let i = 0; i < 5000; i++ ) {
-			let entity = new Entity( i );
+			let entity = this.entityManager.getNextEntity();
 			let body = new BodyComponent( {
 				x: Math.round( Math.random() * this.game.config.width ),
 				y: Math.round( Math.random() * this.game.config.height ),
@@ -94,16 +79,16 @@ class Scene1 extends Scene {
 				height: 16,
 			} );
 
-			this.entities.add( entity ).
-				addComponent( entity, body ).
-				addComponent( entity, new PhysicsComponent( {
+			this.componentManager
+				.add( entity, body )
+				.add( entity, new PhysicsComponent( {
 					velocity: {
 						x:  Math.random() * 150,
 						y: Math.random() * 100
 					},
 					angularVelocity: Math.random() * Math.PI
 				} ) ).
-				addComponent( entity, new SpriteComponent( {
+				add( entity, new SpriteComponent( {
 					key: 'testImage',
 					width: 16,
 					height: 16,
@@ -115,19 +100,15 @@ class Scene1 extends Scene {
 				} ) );
 
 			if ( Math.random() > 0.5 ) {
-				this.entities.addComponent( entity, new AnimationComponent( {
+				this.componentManager.add( entity, new AnimationComponent( {
 					key: 'anim1'
 				} ) );
-			}
-
-			if ( i == 10 ) {
-				this.entities.addComponent( entity, new DebugTextComponent() );
 			}
 		}
 	}
 
 	update( delta ) {
-		this.systems.update( delta );
+		super.update( delta );
 	}
 }
 

@@ -1,9 +1,10 @@
 export default class System {
 	constructor( scene ) {
 		this.scene = scene;
-
-		this.entities = [];
+		this.componentManager = null;
 	}
+
+	init() {}
 
 	update( delta ) {
 		

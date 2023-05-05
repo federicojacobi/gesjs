@@ -1,9 +1,5 @@
-import Component from "../includes/Component";
-
-export default class PhysicsComponent extends Component {
+export default class PhysicsComponent {
 	constructor( args ) {
-		super( 'physics' );
-
 		let config = {
 			velocity: {
 				x: 0,

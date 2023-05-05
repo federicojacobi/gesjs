@@ -4,12 +4,9 @@ import SystemManager from "./SystemManager";
 
 export default class Scene {
 	constructor( game ) {
-		
-		this.components = new ComponentManager();
-		
-		this.entities = new EntityManager( this.components );
-
-		this.systems = new SystemManager();
+		this.entityManager = new EntityManager();
+		this.componentManager = new ComponentManager( this.entityManager );
+		this.systemManager = new SystemManager( this.componentManager );
 
 		this.game = game;
 	}
@@ -24,7 +21,9 @@ export default class Scene {
 
 	preupdate( delta, timestamp ) {}
 
-	update( delta, timestamp ) {}
+	update( delta, timestamp ) {
+		this.systemManager.update( delta );
+	}
 
 	postupdate( delta, timestamp ) {}
 

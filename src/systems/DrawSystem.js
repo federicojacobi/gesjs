@@ -8,8 +8,13 @@ export default class DrawSystem extends System {
 			camera: null,
 			...config
 		};
+	}
 
-		this.camera = this.scene.components.get( this.config.camera ).body;
+	init() {
+		let cameras = this.componentManager.query( [ 'CameraComponent', 'BodyComponent' ] );
+		if ( cameras && cameras.length > 0 ) {
+			this.camera = cameras[0].get( 'BodyComponent' );
+		}
 
 		this.canvas = document.createElement( 'canvas' );
 		this.canvas.style.backgroundColor = 'black';
@@ -24,12 +29,7 @@ export default class DrawSystem extends System {
 		document.body.appendChild( this.canvas );
 	}
 
-	query() {
-		this.entities = this.scene.entities.query( [ 'body', 'sprite' ] );
-	}
-
 	update() {
-		this.query();
 		let ctx = this.ctx;
 		ctx.clearRect( 0, 0, this.camera.width, this.camera.height );
 
@@ -40,8 +40,10 @@ export default class DrawSystem extends System {
 		// ctx.strokeRect( this.camera.x, this.camera.y, this.camera.width, this.camera.height );
 		let drawCalls = 0;
 
-		this.entities.forEach( entity => {
-			let body = this.scene.components.get( entity ).body;
+		let components = this.componentManager.query( [ 'BodyComponent', 'SpriteComponent' ] );
+
+		components.forEach( component => {
+			let body = component.get( 'BodyComponent' );
 
 			// Culling
 			if ( (body.x + body.width) < this.camera.x || body.x > this.camera.x + this.camera.width ||
@@ -49,11 +51,12 @@ export default class DrawSystem extends System {
 				return;
 			}
 
-			let sprite = this.scene.components.get( entity ).sprite;
+			let sprite = component.get( 'SpriteComponent' );
 
 			ctx.setTransform( sprite.scale, 0, 0, sprite.scale, body.x - this.camera.x, body.y - this.camera.y ); // sets scale and origin
 			ctx.rotate( body.angle );
-			if ( this.scene.components.get( entity ).debugText ) {
+			
+			if ( component.has( 'DebugTextComponent' ) ) {
 				ctx.strokeRect( -body.width * body.originX, -body.height * body.originY, body.width, body.height );
 			}
 			
