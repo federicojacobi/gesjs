@@ -60,7 +60,7 @@ class Scene1 extends Scene {
 			add( camera, new DebugTextComponent() );
 
 		this.systemManager.add( new DebugTextSystem( this ) );
-		this.systemManager.add( new AnimationSystem( this ) );
+		// this.systemManager.add( new AnimationSystem( this ) );
 		this.systemManager.add( new PhysicsSystem( this, {
 			width: this.game.config.width,
 			height: this.game.config.height

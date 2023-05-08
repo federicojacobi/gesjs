@@ -44,6 +44,11 @@ export default class ComponentManager {
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param {String[]} componentTypes A list of component types to query
+	 * @returns An array of ALL the components for an entity that matches the query
+	 */
 	query( componentTypes ) {
 		let entities = entityManager.getAll();
 
@@ -51,12 +56,15 @@ export default class ComponentManager {
 			componentTypes = [];
 		}
 
-		componentTypes.forEach( ( componentTypeName ) => {
-			entities = entities.filter( entity => components.has( entity ) && components.get( entity ).has( componentTypeName ) );
-		} );
-
 		const result = [];
 		entities.forEach( e => {
+			const map = components.get( e );
+			for ( let i = 0; i < componentTypes.length; i++ ) {
+				if ( ! map.has( componentTypes[i] ) ) {
+					return;
+				}
+			}
+			
 			result.push( components.get( e ) );
 		} );
 		return result;
@@ -70,7 +78,9 @@ export default class ComponentManager {
 		}
 
 		componentTypes.forEach( ( componentTypeName ) => {
-			result = result.filter( entity => components.has( entity ) && components.get( entity ).has( componentTypeName ) );
+			result = result.filter( 
+				entity => components.has( entity ) && components.get( entity ).has( componentTypeName )
+			);
 		} );
 
 		return result;
