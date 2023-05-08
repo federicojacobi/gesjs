@@ -54,7 +54,7 @@ class Scene1 extends Scene {
 			loop: true,
 		} );
 
-		this.systems.add( new AnimationSystem( this ) );
+		// this.systems.add( new AnimationSystem( this ) );
 		this.systems.add( new PhysicsSystem( this, {
 			width: this.game.config.width,
 			height: this.game.config.height
@@ -86,7 +86,7 @@ class Scene1 extends Scene {
 		} ) );
 		// this.systems.add( new DebugTextSystem( this ) );
 
-		for ( let i = 0; i < 20; i++ ) {
+		for ( let i = 0; i < 100000; i++ ) {
 			let entity = new Entity( i );
 			let body = new BodyComponent( {
 				x: Math.round( Math.random() * this.game.config.width ),
