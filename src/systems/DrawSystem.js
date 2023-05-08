@@ -5,7 +5,6 @@ export default class DrawSystem extends System {
 		super( scene );
 
 		this.config = {
-			camera: null,
 			...config
 		};
 	}

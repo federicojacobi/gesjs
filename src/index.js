@@ -59,18 +59,16 @@ class Scene1 extends Scene {
 			} ) ).
 			add( camera, new DebugTextComponent() );
 
-		// this.systemManager.add( new DebugTextSystem( this ) );
+		this.systemManager.add( new DebugTextSystem( this ) );
 		this.systemManager.add( new AnimationSystem( this ) );
 		this.systemManager.add( new PhysicsSystem( this, {
 			width: this.game.config.width,
 			height: this.game.config.height
 		} ) );
-		this.systemManager.add( new DrawSystem( this, {
-			camera: camera
-		} ) );
+		// this.systemManager.add( new DrawSystem( this ) );
 		
 
-		for ( let i = 0; i < 5000; i++ ) {
+		for ( let i = 0; i < 100000; i++ ) {
 			let entity = this.entityManager.getNextEntity();
 			let body = new BodyComponent( {
 				x: Math.round( Math.random() * this.game.config.width ),

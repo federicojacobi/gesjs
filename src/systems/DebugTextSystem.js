@@ -27,7 +27,7 @@ export default class DebugTextSystem extends System {
 		let entities = this.componentManager.getEntitiesByComponents( [ 'DebugTextComponent' ] );
 		this.clearScreen();
 		
-		let string = '';
+		let string = 'FPS: ' + this.scene.game.fps + '\n';
 		entities.forEach( entity => {
 			string += `ENTITY: ${entity}\n`;
 			string += 'COMPONENTS:\n';
