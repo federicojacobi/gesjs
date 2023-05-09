@@ -68,7 +68,7 @@ class Scene1 extends Scene {
 		// this.systemManager.add( new DrawSystem( this ) );
 		
 
-		for ( let i = 0; i < 100000; i++ ) {
+		for ( let i = 0; i < 200000; i++ ) {
 			let entity = this.entityManager.getNextEntity();
 			let body = new BodyComponent( {
 				x: Math.round( Math.random() * this.game.config.width ),

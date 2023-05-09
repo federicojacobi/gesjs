@@ -24,36 +24,37 @@ export default class DebugTextSystem extends System {
 	}
 
 	update() {
-		let entities = this.componentManager.getEntitiesByComponents( [ 'DebugTextComponent' ] );
+		let entities = this.componentManager.getEntitiesByComponents( [ 'BodyComponent', 'PhysicsComponent' ] );
 		this.clearScreen();
 		
 		let string = 'FPS: ' + this.scene.game.fps + '\n';
-		entities.forEach( entity => {
-			string += `ENTITY: ${entity}\n`;
-			string += 'COMPONENTS:\n';
-			let components = this.componentManager.getComponentsByEntity( entity );
-			if ( ! components ) {
-				return;
-			}
-			const componentType = components.keys();
+		string += entities.length + ' FOUND';
+		// entities.forEach( entity => {
+		// 	string += `ENTITY: ${entity}\n`;
+		// 	string += 'COMPONENTS:\n';
+		// 	let components = this.componentManager.getComponentsByEntity( entity );
+		// 	if ( ! components ) {
+		// 		return;
+		// 	}
+		// 	const componentType = components.keys();
 
-			for ( let type of componentType ) {
-				string += `\t${type}:\n`;
+		// 	for ( let type of componentType ) {
+		// 		string += `\t${type}:\n`;
 
-				let _component = components.get( type );
-				for ( let key in _component ) {
-					string += `\t\t${key}: `;
-					if ( typeof _component[key] == 'object' ) {
-						for ( let k in _component[key] ) {
-							string += `${k}->${_component[key][k]} `;
-						}
-					} else {
-						string += `${_component[key]}`;
-					}
-				}
-				string += '\n';
-			}
-		} );
+		// 		let _component = components.get( type );
+		// 		for ( let key in _component ) {
+		// 			string += `\t\t${key}: `;
+		// 			if ( typeof _component[key] == 'object' ) {
+		// 				for ( let k in _component[key] ) {
+		// 					string += `${k}->${_component[key][k]} `;
+		// 				}
+		// 			} else {
+		// 				string += `${_component[key]}`;
+		// 			}
+		// 		}
+		// 		string += '\n';
+		// 	}
+		// } );
 		this.container.innerHTML = string;
 	}
 }
