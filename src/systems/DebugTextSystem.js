@@ -24,33 +24,34 @@ export default class DebugTextSystem extends System {
 	}
 
 	update() {
-		let entities = this.scene.entities.query( [ 'debugText' ] );
+		let entities = this.scene.entities.query( [ 'body', 'physics' ] );
 		this.clearScreen();
 		
-		let string = '';
-		entities.forEach( entity => {
-			string += `ENTITY: ${entity.name}\n`;
-			string += 'COMPONENTS:\n';
-			let components = this.scene.components.get( entity );
-			for ( let component in components ) {
-				string += `\t${component}:\n`;
-				for ( let key in components[ component ] ) {
-					if ( key == 'type' || key == 'scene' ) {
-						continue;
-					}
-					string += `\t\t${key}: `;
-					if ( typeof components[component][key] == 'object' ) {
-						for ( let k in components[component][key] ) {
-							string += `${k}->${components[component][key][k]} `;
-						}
-					} else {
-						string += `${components[component][key]}`;
-					}
-				}
-				string += '\n';
-			}
+		let string = 'FPS: ' + this.scene.game.fps + '\n';
+		string += entities.length + ' FOUND';
+		// entities.forEach( entity => {
+		// 	string += `ENTITY: ${entity.name}\n`;
+		// 	string += 'COMPONENTS:\n';
+		// 	let components = this.scene.components.get( entity );
+		// 	for ( let component in components ) {
+		// 		string += `\t${component}:\n`;
+		// 		for ( let key in components[ component ] ) {
+		// 			if ( key == 'type' || key == 'scene' ) {
+		// 				continue;
+		// 			}
+		// 			string += `\t\t${key}: `;
+		// 			if ( typeof components[component][key] == 'object' ) {
+		// 				for ( let k in components[component][key] ) {
+		// 					string += `${k}->${components[component][key][k]} `;
+		// 				}
+		// 			} else {
+		// 				string += `${components[component][key]}`;
+		// 			}
+		// 		}
+		// 		string += '\n';
+		// 	}
 			
-		} );
+		// } );
 		this.container.innerHTML = string;
 	}
 }

@@ -84,7 +84,7 @@ class Scene1 extends Scene {
 		// this.systems.add( new InputSystem( this, {
 		// 	camera: camera
 		// } ) );
-		// this.systems.add( new DebugTextSystem( this ) );
+		this.systems.add( new DebugTextSystem( this ) );
 
 		for ( let i = 0; i < 200000; i++ ) {
 			let entity = new Entity( i );
