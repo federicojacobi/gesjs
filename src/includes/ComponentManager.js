@@ -1,5 +1,8 @@
 const components = new Map();
 let entityManager;
+
+const queries = new Map();
+
 export default class ComponentManager {
 	constructor( _entityManager ) {
 		if ( _entityManager ) {
@@ -20,9 +23,32 @@ export default class ComponentManager {
 	
 	add( eid, component ) {
 		const typeName = component.constructor.name;
-		const componentList = components.get( eid ) || new Map();
+		let componentList = components.get( eid );
+
+		if ( ! componentList ) {
+			componentList = new Map();
+			components.set( eid, componentList );
+		}
+
 		componentList.set( typeName, component );
-		components.set( eid, componentList );
+
+		/**
+		 * Test query versus a list of components.
+		 *
+		 * @param {Map} componentList 
+		 * @param {string[]} query 
+		 * @returns boolean
+		 */
+		const applyQuery = function( componentList, query ) {
+			let intersection = query.filter( x => componentList.has( x ) );
+			return query.length == intersection.length;
+		}
+
+		for ( const queryKey of queries.keys() ) {
+			if ( applyQuery( componentList, queryKey ) ) {
+				queries.get( queryKey ).add( eid );
+			}
+		}
 
 		return this;
 	}
@@ -37,37 +63,13 @@ export default class ComponentManager {
 	}
 
 	getComponentsByEntity( eid ) {
-		if ( components.has( eid ) ) {
-			return components.get( eid );
-		}
-
-		return null;
+		return components.get( eid );
 	}
 
-	/**
-	 * 
-	 * @param {String[]} componentTypes A list of component types to query
-	 * @returns An array of ALL the components for an entity that matches the query
-	 */
-	query( componentTypes ) {
-		let entities = entityManager.getAll();
-
-		if ( ! componentTypes ) {
-			componentTypes = [];
-		}
-
-		const result = [];
-		entities.forEach( e => {
-			const map = components.get( e );
-			for ( let i = 0; i < componentTypes.length; i++ ) {
-				if ( ! map.has( componentTypes[i] ) ) {
-					return;
-				}
-			}
-			
-			result.push( components.get( e ) );
-		} );
-		return result;
+	defineQuery( componentTypes ) {
+		const set = new Set();
+		queries.set( componentTypes, set );
+		return set;
 	}
 
 	getEntitiesByComponents( componentTypes ) {

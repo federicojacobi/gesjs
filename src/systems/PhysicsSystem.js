@@ -11,19 +11,23 @@ export default class PhysicsSystem extends System {
 		};
 	}
 
+	init() {
+		this.query = this.componentManager.defineQuery( [ 'BodyComponent', 'PhysicsComponent' ] );
+	}
+
 	update( delta ) {
-		let components = this.componentManager.query( [ 'BodyComponent', 'PhysicsComponent' ] );
+		for ( const entity of this.query.values() ) {
+			let component = this.componentManager.getComponentsByEntity( entity );
 
-		components.forEach( component => {
 			let body = component.get( 'BodyComponent' )
-			let velocity = component.get( 'PhysicsComponent' ).velocity;
+			let physics = component.get( 'PhysicsComponent' );
 
-			body.x += ( velocity.x * delta ) / 1000;
-			body.y += ( velocity.y * delta ) / 1000;
-			body.angle += component.get( 'PhysicsComponent' ).angularVelocity * delta / 1000;
+			body.x += ( physics.velocity.x * delta ) / 1000;
+			body.y += ( physics.velocity.y * delta ) / 1000;
+			body.angle += physics.angularVelocity * delta / 1000;
 
 			if ( body.x + body.width > this.scene.game.config.width || body.x < 0 ) {
-				velocity.x *= -1;
+				physics.velocity.x *= -1;
 			}
 
 			if ( body.x < 0 ) {
@@ -34,7 +38,7 @@ export default class PhysicsSystem extends System {
 			}
 
 			if ( body.y + body.height > this.scene.game.config.height || body.y < 0 ) {
-				velocity.y *= -1;
+				physics.velocity.y *= -1;
 			}
 
 			if ( body.y < 0 ) {
@@ -43,6 +47,6 @@ export default class PhysicsSystem extends System {
 			if ( ( body.y + body.heighy ) > this.scene.game.config.height ) {
 				body.y = this.scene.game.config.height - body.height;
 			}
-		} );
+		}
 	}
 }

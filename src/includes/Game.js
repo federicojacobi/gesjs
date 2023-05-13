@@ -38,6 +38,18 @@ export default class Game extends EventEmitter {
 			this.activeScene.create();
 
 			lastFrameTimestamp = performance.now();
+
+			window.addEventListener( 'blur', () => {
+				cancelAnimationFrame( this.animationFrame );
+
+				window.addEventListener( 'focus', () => {
+					lastFrameTimestamp = performance.now();
+					requestAnimationFrame( this.update.bind( this ) );
+				}, {
+					once: true
+				} );
+			} );
+
 			this.animationFrame = requestAnimationFrame( this.update.bind( this ) );
 		} );
 	}

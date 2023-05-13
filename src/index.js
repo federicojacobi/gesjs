@@ -49,6 +49,17 @@ class Scene1 extends Scene {
 			loop: true,
 		} );
 
+		// this.systemManager.add( new AnimationSystem( this ) );
+		this.systemManager.add( new PhysicsSystem( this, {
+			width: this.game.config.width,
+			height: this.game.config.height
+		} ) );
+		this.systemManager.add( new DrawSystem( this, {
+			width: this.game.config.width,
+			height: this.game.config.height
+		} ) );
+		this.systemManager.add( new DebugTextSystem( this ) );
+		
 		let camera = this.entityManager.getNextEntity();
 		this.componentManager.add( camera, new CameraComponent() ).
 			add( camera, new BodyComponent( {
@@ -57,28 +68,20 @@ class Scene1 extends Scene {
 				width: 640,
 				height: 480
 			} ) ).
-			add( camera, new DebugTextComponent() );
+			add( camera, new DebugTextComponent() )
+			;
 
-		this.systemManager.add( new DebugTextSystem( this ) );
-		// this.systemManager.add( new AnimationSystem( this ) );
-		this.systemManager.add( new PhysicsSystem( this, {
-			width: this.game.config.width,
-			height: this.game.config.height
-		} ) );
-		// this.systemManager.add( new DrawSystem( this ) );
-		
-
-		for ( let i = 0; i < 200000; i++ ) {
+		for ( let i = 0; i < 30; i++ ) {
 			let entity = this.entityManager.getNextEntity();
-			let body = new BodyComponent( {
-				x: Math.round( Math.random() * this.game.config.width ),
-				y: Math.round( Math.random() * this.game.config.height ),
-				width: 16,
-				height: 16,
-			} );
 
 			this.componentManager
-				.add( entity, body )
+				.add( entity, new BodyComponent( {
+					x: Math.round( Math.random() * this.game.config.width ),
+					y: Math.round( Math.random() * this.game.config.height ),
+					width: 16,
+					height: 16,
+				} ) )
+				// .add( entity, new DebugTextComponent() )
 				.add( entity, new PhysicsComponent( {
 					velocity: {
 						x:  Math.random() * 150,

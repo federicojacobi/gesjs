@@ -19,42 +19,45 @@ export default class DebugTextSystem extends System {
 		console.log( 'DEBUGGER ON' );
 	}
 
+	init() {
+		this.query = this.componentManager.defineQuery( [ 'DebugTextComponent' ] );
+	}
+
 	clearScreen() {
 		this.container.innerHTML = '';
 	}
 
 	update() {
-		let entities = this.componentManager.getEntitiesByComponents( [ 'BodyComponent', 'PhysicsComponent' ] );
-		this.clearScreen();
-		
+		// this.clearScreen();
 		let string = 'FPS: ' + this.scene.game.fps + '\n';
-		string += entities.length + ' FOUND';
-		// entities.forEach( entity => {
-		// 	string += `ENTITY: ${entity}\n`;
-		// 	string += 'COMPONENTS:\n';
-		// 	let components = this.componentManager.getComponentsByEntity( entity );
-		// 	if ( ! components ) {
-		// 		return;
-		// 	}
-		// 	const componentType = components.keys();
+		string += this.query.size + ' FOUND \n';
 
-		// 	for ( let type of componentType ) {
-		// 		string += `\t${type}:\n`;
+		for ( const entity of this.query.values() ) {
+			string += `ENTITY: ${entity}\n`;
+			string += 'COMPONENTS:\n';
+			let components = this.componentManager.getComponentsByEntity( entity );
+			if ( ! components ) {
+				return;
+			}
+			const componentType = components.keys();
 
-		// 		let _component = components.get( type );
-		// 		for ( let key in _component ) {
-		// 			string += `\t\t${key}: `;
-		// 			if ( typeof _component[key] == 'object' ) {
-		// 				for ( let k in _component[key] ) {
-		// 					string += `${k}->${_component[key][k]} `;
-		// 				}
-		// 			} else {
-		// 				string += `${_component[key]}`;
-		// 			}
-		// 		}
-		// 		string += '\n';
-		// 	}
-		// } );
+			for ( let type of componentType ) {
+				string += `\t${type}:\n`;
+
+				let _component = components.get( type );
+				for ( let key in _component ) {
+					string += `\t\t${key}: `;
+					if ( typeof _component[key] == 'object' ) {
+						for ( let k in _component[key] ) {
+							string += `${k}->${_component[key][k]} `;
+						}
+					} else {
+						string += `${_component[key]}`;
+					}
+				}
+				string += '\n';
+			}
+		}
 		this.container.innerHTML = string;
 	}
 }
